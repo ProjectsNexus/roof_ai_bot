@@ -1,0 +1,6 @@
+{
+  "name": "AI Lead-Capture Landing Page & Sales Demo Guide",
+  "description": "Production-grade AI lead capture landing page, receptionist chat qualification engine, and turnkey sales demo platform for roofing, storm damage, and home service contractors.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
