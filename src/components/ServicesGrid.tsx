@@ -4,9 +4,10 @@ import { CompanyConfig, ServiceItem } from '../types/config';
 interface ServicesGridProps {
   config: CompanyConfig;
   onSelectService: (serviceName: string) => void;
+  onScheduleService?: (serviceName: string) => void;
 }
 
-export function ServicesGrid({ config, onSelectService }: ServicesGridProps) {
+export function ServicesGrid({ config, onSelectService, onScheduleService }: ServicesGridProps) {
   // Mapping service icons cleanly
   const getIcon = (id: string) => {
     switch (id) {
@@ -78,13 +79,25 @@ export function ServicesGrid({ config, onSelectService }: ServicesGridProps) {
                     ))}
                   </div>
 
-                  <button
-                    onClick={() => onSelectService(service.title)}
-                    className="w-full flex items-center justify-between px-3 py-2 text-xs font-semibold rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors cursor-pointer"
-                  >
-                    <span>Check Availability</span>
-                    <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors" />
-                  </button>
+                  <div className="flex items-center gap-2">
+                    {onScheduleService && (
+                      <button
+                        onClick={() => onScheduleService(service.title)}
+                        className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-semibold rounded text-white shadow-2xs hover:opacity-95 transition-all cursor-pointer"
+                        style={{ backgroundColor: config.color || '#1e3a8a' }}
+                      >
+                        <span>Book Inspection</span>
+                        <ArrowUpRight className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+                    <button
+                      onClick={() => onSelectService(service.title)}
+                      className={`${onScheduleService ? 'px-3' : 'w-full'} flex items-center justify-center gap-1.5 py-2 text-xs font-semibold rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors cursor-pointer`}
+                      title="Ask 24/7 AI Receptionist about this service"
+                    >
+                      <span>Ask AI</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             );

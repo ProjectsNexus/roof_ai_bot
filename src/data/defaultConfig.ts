@@ -14,7 +14,7 @@ export const DEFAULT_CONFIG: CompanyConfig = {
   areas: ["Dallas", "Plano", "Frisco", "McKinney", "Richardson", "Carrollton"],
   color: "#1e3a8a", // refined deep blue / navy
   calendar: "https://cal.com/demo-roofing/free-inspection",
-  webhook: "https://jefose.app.n8n.cloud/webhook/45df9c9a-30b7-4bc3-9cd0-bb3d1400b60b/chat", // Live n8n webhook
+  webhook: "", // Native Gemini AI Chat Agent enabled (managed via prompts.json)
   services: [
     {
       id: "emergency-repair",

@@ -91,18 +91,8 @@ export function Footer({ config, onOpenAdminPortal }: FooterProps) {
             <span>Terms of Service</span>
             <span aria-hidden="true">·</span>
             <span>TCPA SMS Consent Compliant</span>
-            {onOpenAdminPortal && (
-              <>
-                <span aria-hidden="true">·</span>
-                <button
-                  onClick={onOpenAdminPortal}
-                  className="text-slate-600 hover:text-slate-400 transition-colors cursor-pointer"
-                  title="Sales Kit & Settings"
-                >
-                  Admin / Demo Kit
-                </button>
-              </>
-            )}
+            <span aria-hidden="true">·</span>
+            <span>Licensed & Insured Roofing Contractor</span>
           </div>
         </div>
 

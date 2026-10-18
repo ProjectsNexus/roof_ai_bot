@@ -4,9 +4,10 @@ import { CompanyConfig } from '../types/config';
 interface ContactSectionProps {
   config: CompanyConfig;
   onOpenChat: () => void;
+  onScheduleMeeting?: () => void;
 }
 
-export function ContactSection({ config, onOpenChat }: ContactSectionProps) {
+export function ContactSection({ config, onOpenChat, onScheduleMeeting }: ContactSectionProps) {
   return (
     <section id="contact" className="py-16 sm:py-24 bg-gradient-to-b from-white to-slate-50 dark:from-slate-900 dark:to-slate-950 border-b border-slate-200 dark:border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -29,22 +30,32 @@ export function ContactSection({ config, onOpenChat }: ContactSectionProps) {
                 Our 24/7 digital intake qualifies your need instantly and dispatches {config.owner}'s crew. We provide a 100% free, 21-point on-site assessment with full photographic insurance evidence.
               </p>
 
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
+                {onScheduleMeeting && (
+                  <button
+                    onClick={onScheduleMeeting}
+                    className="px-6 py-3.5 rounded-lg text-white font-bold text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap"
+                    style={{ backgroundColor: config.color || '#1e3a8a' }}
+                  >
+                    <Calendar className="w-4 h-4" />
+                    <span>Schedule Inspection (In-Person / Call / Zoom)</span>
+                  </button>
+                )}
+
                 <button
                   onClick={onOpenChat}
-                  className="px-6 py-3.5 rounded-lg text-white font-bold text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap"
-                  style={{ backgroundColor: config.color || '#1e3a8a' }}
+                  className="px-5 py-3.5 rounded-lg bg-white/10 hover:bg-white/15 border border-white/20 text-white font-bold text-sm transition-colors flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap"
                 >
-                  <Calendar className="w-4 h-4" />
-                  <span>Start Free 60-Second Online Assessment</span>
+                  <ArrowRight className="w-4 h-4" />
+                  <span>Start 60-Sec AI Chat</span>
                 </button>
 
                 <a
                   href={`tel:${config.phoneRaw}`}
-                  className="px-6 py-3.5 rounded-lg bg-white/10 hover:bg-white/15 border border-white/20 text-white font-bold text-sm transition-colors flex items-center justify-center gap-2 whitespace-nowrap"
+                  className="px-4 py-3.5 rounded-lg bg-emerald-600/90 hover:bg-emerald-600 text-white font-bold text-sm transition-colors flex items-center justify-center gap-2 whitespace-nowrap"
                 >
-                  <Phone className="w-4 h-4 text-emerald-400" />
-                  <span>Call {config.phone}</span>
+                  <Phone className="w-4 h-4" />
+                  <span>{config.phone}</span>
                 </a>
               </div>
             </div>

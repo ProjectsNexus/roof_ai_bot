@@ -4,9 +4,10 @@ import { CompanyConfig } from '../types/config';
 interface HeroProps {
   config: CompanyConfig;
   onOpenChat: () => void;
+  onScheduleMeeting: () => void;
 }
 
-export function Hero({ config, onOpenChat }: HeroProps) {
+export function Hero({ config, onOpenChat, onScheduleMeeting }: HeroProps) {
   return (
     <section id="top" className="relative overflow-hidden bg-gradient-to-b from-slate-50 via-white to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 pt-10 pb-16 lg:pt-16 lg:pb-24 border-b border-slate-200/80 dark:border-slate-800">
       
@@ -44,22 +45,30 @@ export function Hero({ config, onOpenChat }: HeroProps) {
             </p>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mb-8">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 mb-8">
               <button
-                onClick={onOpenChat}
+                onClick={onScheduleMeeting}
                 className="group flex items-center justify-center gap-2.5 px-6 py-3.5 text-base font-semibold text-white rounded-lg shadow-md hover:shadow-lg transition-all cursor-pointer whitespace-nowrap shrink-0"
                 style={{ backgroundColor: config.color || '#1e3a8a' }}
               >
-                <span>Request Free Roof Inspection</span>
+                <span>Schedule Free Inspection</span>
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              </button>
+
+              <button
+                onClick={onOpenChat}
+                className="flex items-center justify-center gap-2 px-5 py-3.5 text-base font-semibold text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800/90 rounded-lg border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              >
+                <span>Ask 24/7 AI Assistant</span>
               </button>
 
               <a
                 href={`tel:${config.phoneRaw}`}
-                className="flex items-center justify-center gap-2 px-5 py-3.5 text-base font-semibold text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800/90 rounded-lg border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors whitespace-nowrap shrink-0"
+                className="flex items-center justify-center gap-2 px-4 py-3.5 text-base font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 rounded-lg border border-emerald-200 dark:border-emerald-800/60 hover:bg-emerald-100 transition-colors whitespace-nowrap shrink-0"
               >
-                <Phone className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                <span>Call {config.phone}</span>
+                <Phone className="w-4 h-4" />
+                <span className="hidden sm:inline">{config.phone}</span>
+                <span className="sm:hidden">Call</span>
               </a>
             </div>
 

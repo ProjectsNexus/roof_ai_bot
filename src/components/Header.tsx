@@ -4,10 +4,10 @@ import { CompanyConfig } from '../types/config';
 interface HeaderProps {
   config: CompanyConfig;
   onOpenChat: () => void;
-  onOpenSalesKit: () => void;
+  onScheduleMeeting: () => void;
 }
 
-export function Header({ config, onOpenChat, onOpenSalesKit }: HeaderProps) {
+export function Header({ config, onOpenChat, onScheduleMeeting }: HeaderProps) {
   // First letter badge for the company when logos are not loaded via URL params
   const initialLetter = config.name ? config.name.charAt(0).toUpperCase() : 'S';
 
@@ -47,24 +47,24 @@ export function Header({ config, onOpenChat, onOpenSalesKit }: HeaderProps) {
           </a>
         </nav>
 
-        {/* Zone 3: 1 primary action */}
-        <div className="flex items-center gap-3 shrink-0">
+        {/* Zone 3: Direct Actions (Call, Schedule Meeting, AI Receptionist) */}
+        <div className="flex items-center gap-2.5 shrink-0">
           <a
             href={`tel:${config.phoneRaw}`}
-            className="flex items-center gap-2 px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-md border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors whitespace-nowrap shrink-0"
+            className="flex items-center gap-2 px-3 py-2 text-xs sm:text-sm font-semibold rounded-lg border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors whitespace-nowrap shrink-0"
           >
             <Phone className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-            <span className="hidden sm:inline">{config.phone}</span>
-            <span className="sm:hidden">Call Now</span>
+            <span className="hidden lg:inline">{config.phone}</span>
+            <span className="lg:hidden">Call</span>
           </a>
 
           <button
-            onClick={onOpenChat}
-            className="flex items-center gap-1.5 px-4 py-2 text-xs sm:text-sm font-semibold text-white rounded-md shadow-sm hover:opacity-95 transition-all whitespace-nowrap shrink-0 cursor-pointer"
+            onClick={onScheduleMeeting}
+            className="flex items-center gap-1.5 px-3.5 py-2 text-xs sm:text-sm font-semibold text-white rounded-lg shadow-sm hover:opacity-95 transition-all whitespace-nowrap shrink-0 cursor-pointer"
             style={{ backgroundColor: config.color || '#1e3a8a' }}
           >
             <Calendar className="w-3.5 h-3.5" />
-            <span>Free Inspection</span>
+            <span>Schedule Inspection</span>
           </button>
         </div>
 

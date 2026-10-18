@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { DEFAULT_CONFIG, INITIAL_SAMPLE_LEADS } from './data/defaultConfig';
-import { CompanyConfig, LeadData } from './types/config';
-import { DemoBanner } from './components/DemoBanner';
+import { CompanyConfig, LeadData, ScheduledMeeting } from './types/config';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { TrustBar } from './components/TrustBar';
@@ -10,25 +9,21 @@ import { ServicesGrid } from './components/ServicesGrid';
 import { Testimonials } from './components/Testimonials';
 import { FAQ } from './components/FAQ';
 import { ContactSection } from './components/ContactSection';
-import { OwnerLeadPreview } from './components/OwnerLeadPreview';
-import { DeveloperPitch } from './components/DeveloperPitch';
 import { Footer } from './components/Footer';
 import { ChatWidget } from './components/ChatWidget';
-import { DemoUrlCustomizer } from './components/DemoUrlCustomizer';
-import { SalesKitDrawer } from './components/SalesKitDrawer';
+import { MeetingSchedulerModal } from './components/MeetingSchedulerModal';
 
 export default function App() {
   const [config, setConfig] = useState<CompanyConfig>(DEFAULT_CONFIG);
-  const [leads, setLeads] = useState<LeadData[]>(INITIAL_SAMPLE_LEADS);
-  const [forceDemoMode, setForceDemoMode] = useState<boolean>(false);
+  const [, setLeads] = useState<LeadData[]>(INITIAL_SAMPLE_LEADS);
   
-  // Interactive Modals and Drawers
+  // Interactive Modals
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const [isCustomizerOpen, setIsCustomizerOpen] = useState(false);
-  const [isSalesKitOpen, setIsSalesKitOpen] = useState(false);
+  const [isSchedulerOpen, setIsSchedulerOpen] = useState(false);
+  const [schedulerPreselectedService, setSchedulerPreselectedService] = useState<string | undefined>(undefined);
   const [activeServiceInquiry, setActiveServiceInquiry] = useState<string | undefined>(undefined);
 
-  // Read URL Parameters on initial mount (Section 3.2)
+  // Read URL Parameters on initial mount if customized
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
@@ -37,14 +32,8 @@ export default function App() {
       const city = params.get('city');
       const phone = params.get('phone');
       const color = params.get('color');
-      const webhook = params.get('webhook');
-      const demo = params.get('demo') || params.get('mode');
 
-      if (demo === 'true' || demo === 'demo') {
-        setForceDemoMode(true);
-      }
-
-      if (name || owner || city || phone || color || webhook !== null) {
+      if (name || owner || city || phone || color) {
         setConfig((prev) => ({
           ...prev,
           name: name || prev.name,
@@ -53,21 +42,26 @@ export default function App() {
           phone: phone || prev.phone,
           phoneRaw: phone ? phone.replace(/[^0-9+]/g, '') : prev.phoneRaw,
           color: color ? (color.startsWith('#') ? color : `#${color}`) : prev.color,
-          webhook: webhook !== null ? webhook : prev.webhook
         }));
       }
     }
   }, []);
 
-  const handleUpdateConfig = (newVals: Partial<CompanyConfig>) => {
-    setConfig((prev) => ({
-      ...prev,
-      ...newVals
-    }));
-  };
-
   const handleLeadCaptured = (newLead: LeadData) => {
     setLeads((prev) => [newLead, ...prev]);
+  };
+
+  const handleOpenScheduler = (service?: string) => {
+    setSchedulerPreselectedService(service);
+    setIsSchedulerOpen(true);
+  };
+
+  const handleCloseScheduler = () => {
+    setIsSchedulerOpen(false);
+  };
+
+  const handleMeetingBooked = (_meeting: ScheduledMeeting, newLead: LeadData) => {
+    handleLeadCaptured(newLead);
   };
 
   const handleSelectService = (serviceTitle: string) => {
@@ -75,75 +69,40 @@ export default function App() {
     setIsChatOpen(true);
   };
 
-  const handleRunTestInChat = (prompt: string) => {
-    setActiveServiceInquiry(prompt);
-    setIsChatOpen(true);
+  const handleScheduleService = (serviceTitle: string) => {
+    handleOpenScheduler(serviceTitle);
   };
-
-  const handleSimulateEmergency = () => {
-    const emergLead: LeadData = {
-      id: 'lead-' + Date.now(),
-      timestamp: 'Just now',
-      session: 'sess_' + Math.floor(Math.random() * 8999 + 1000) + '_emergency',
-      name: 'Michael Henderson',
-      phone: '+1 (214) 555-8912',
-      email: 'mhenderson@dallastx.com',
-      service: 'Active Leak / Emergency Tarping',
-      location: `${config.city} (Highland Park)`,
-      urgency: 'emergency',
-      budget: 'Insurance claim / urgent repair',
-      booked: false,
-      sms_consent: true,
-      needs_human: true,
-      score: 95,
-      intent: 'emergency',
-      sentiment: 'frustrated',
-      summary: 'Heavy hail broke through master bedroom skylight and ceiling drywall. Water actively entering.'
-    };
-    setLeads((prev) => [emergLead, ...prev]);
-  };
-
-  // Publish mode vs Demo mode
-  const isPublishMode = !forceDemoMode && Boolean(config.webhook && config.webhook.trim() !== '');
 
   return (
     <div className="min-h-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col selection:bg-blue-600 selection:text-white">
       
-      {/* 1. Demo Mode Prototype Banner (Only shown in demo mode, hidden in publish view) */}
-      {!isPublishMode && (
-        <DemoBanner
-          config={config}
-          onOpenCustomizer={() => setIsCustomizerOpen(true)}
-          onOpenSalesKit={() => setIsSalesKitOpen(true)}
-        />
-      )}
-
-      {/* 2. Sticky Header (Clean 3-zone Top Bar Contract) */}
+      {/* 1. Sticky Header with Top Bar Contract */}
       <Header
         config={config}
         onOpenChat={() => {
           setActiveServiceInquiry(undefined);
           setIsChatOpen(true);
         }}
-        onOpenSalesKit={() => setIsSalesKitOpen(true)}
+        onScheduleMeeting={() => handleOpenScheduler()}
       />
 
-      {/* Main Page Content */}
+      {/* Main Roofing Contractor Page */}
       <main className="flex-1">
         
-        {/* 3. Hero Section */}
+        {/* 2. Hero Section with Outcome Value Proposition */}
         <Hero
           config={config}
           onOpenChat={() => {
             setActiveServiceInquiry(undefined);
             setIsChatOpen(true);
           }}
+          onScheduleMeeting={() => handleOpenScheduler()}
         />
 
-        {/* 4. Verified Trust Row */}
+        {/* 3. Verified Trust & Licensing Row */}
         <TrustBar config={config} />
 
-        {/* 5. How It Works (3 Steps) */}
+        {/* 4. How It Works (3-Step Clear Inspection Process) */}
         <HowItWorks
           config={config}
           onOpenChat={() => {
@@ -152,16 +111,17 @@ export default function App() {
           }}
         />
 
-        {/* 6. Services Grid */}
+        {/* 5. Services Grid with Dual Action (Book Inspection & Ask AI) */}
         <ServicesGrid
           config={config}
           onSelectService={handleSelectService}
+          onScheduleService={handleScheduleService}
         />
 
-        {/* 7. Homeowner Reviews */}
+        {/* 6. Verified Customer Testimonials */}
         <Testimonials config={config} />
 
-        {/* 8. FAQ Objections Handler */}
+        {/* 7. Objections & Frequently Asked Questions Accordion */}
         <FAQ
           config={config}
           onOpenChat={() => {
@@ -170,41 +130,22 @@ export default function App() {
           }}
         />
 
-        {/* 9. Contact & Emergency Dispatch Section (For Real Homeowners & Publish View) */}
+        {/* 8. 24/7 Emergency Dispatch & Schedule Section */}
         <ContactSection
           config={config}
           onOpenChat={() => {
             setActiveServiceInquiry(undefined);
             setIsChatOpen(true);
           }}
+          onScheduleMeeting={() => handleOpenScheduler()}
         />
-
-        {/* 10. Owner Proof Panel & Developer Pitch (Hidden in Publish View, Only Shown in Demo Mode) */}
-        {!isPublishMode && (
-          <>
-            <OwnerLeadPreview
-              config={config}
-              leads={leads}
-              onSimulateEmergency={handleSimulateEmergency}
-            />
-
-            <DeveloperPitch
-              config={config}
-              onOpenCustomizer={() => setIsCustomizerOpen(true)}
-              onOpenSalesKit={() => setIsSalesKitOpen(true)}
-            />
-          </>
-        )}
 
       </main>
 
-      {/* 11. Footer */}
-      <Footer
-        config={config}
-        onOpenAdminPortal={() => setIsSalesKitOpen(true)}
-      />
+      {/* 9. Professional Contractor Footer */}
+      <Footer config={config} />
 
-      {/* 12. Floating 24/7 AI Receptionist Chat Widget (Connected to n8n Webhook) */}
+      {/* 10. Floating 24/7 Gemini AI Receptionist Chat Widget */}
       <ChatWidget
         config={config}
         isOpen={isChatOpen}
@@ -214,24 +155,17 @@ export default function App() {
         }}
         onClose={() => setIsChatOpen(false)}
         onLeadCaptured={handleLeadCaptured}
+        onOpenScheduler={handleOpenScheduler}
         initialService={activeServiceInquiry}
-        isDemoMode={!isPublishMode}
       />
 
-      {/* 13. Prospect Demo URL Customizer Modal */}
-      <DemoUrlCustomizer
+      {/* 11. Meeting Scheduler Modal (In-Person / Phone Call / Zoom) */}
+      <MeetingSchedulerModal
         config={config}
-        isOpen={isCustomizerOpen}
-        onClose={() => setIsCustomizerOpen(false)}
-        onUpdateConfig={handleUpdateConfig}
-      />
-
-      {/* 14. Full Sales Kit & Solution Guide Drawer */}
-      <SalesKitDrawer
-        config={config}
-        isOpen={isSalesKitOpen}
-        onClose={() => setIsSalesKitOpen(false)}
-        onRunTestInChat={handleRunTestInChat}
+        isOpen={isSchedulerOpen}
+        onClose={handleCloseScheduler}
+        onMeetingBooked={handleMeetingBooked}
+        preselectedService={schedulerPreselectedService}
       />
 
     </div>

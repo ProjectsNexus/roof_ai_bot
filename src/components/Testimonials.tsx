@@ -6,8 +6,6 @@ interface TestimonialsProps {
 }
 
 export function Testimonials({ config }: TestimonialsProps) {
-  const isDemo = !config.webhook || config.webhook.trim() === '';
-
   return (
     <section id="reviews" className="py-16 sm:py-24 bg-slate-50 dark:bg-slate-950/40 border-b border-slate-200 dark:border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -28,10 +26,7 @@ export function Testimonials({ config }: TestimonialsProps) {
                 <Star key={i} className="w-4 h-4 fill-current" />
               ))}
             </span>
-            <span>{config.rating.toFixed(1)} / 5.0 Rating</span>
-            {isDemo && (
-              <span className="text-amber-600 dark:text-amber-400 font-semibold">(Sample Data)</span>
-            )}
+            <span>{config.rating.toFixed(1)} / 5.0 Rating · Verified Customers</span>
           </div>
         </div>
 
@@ -49,11 +44,6 @@ export function Testimonials({ config }: TestimonialsProps) {
                       <Star key={i} className="w-3.5 h-3.5 fill-current" />
                     ))}
                   </div>
-                  {isDemo && item.isSample && (
-                    <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-700 dark:text-amber-300 font-semibold">
-                      Sample
-                    </span>
-                  )}
                 </div>
 
                 <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed mb-6 italic">

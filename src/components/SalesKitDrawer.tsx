@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { 
   X, Video, FileCode, CheckSquare, Layers, ShieldCheck, 
-  Copy, Check, ExternalLink, ArrowRight, Play, Clock, AlertTriangle, Terminal
+  Copy, Check, ExternalLink, ArrowRight, Play, Clock, AlertTriangle, Terminal, Sparkles
 } from 'lucide-react';
 import { CompanyConfig, TestCase } from '../types/config';
 import { TEST_CHECKLIST } from '../data/defaultConfig';
@@ -95,8 +95,8 @@ export function SalesKitDrawer({
                 : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900'
             }`}
           >
-            <FileCode className="w-3.5 h-3.5" />
-            <span>n8n Workflows v2</span>
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Gemini AI & JSON Prompts</span>
           </button>
 
           <button

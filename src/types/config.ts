@@ -55,11 +55,28 @@ export interface LeadData {
   booked: boolean;
   sms_consent: boolean;
   needs_human: boolean;
+  meetingType?: 'phone' | 'in_person' | 'zoom';
+  meetingDate?: string;
+  meetingTime?: string;
   notes?: string;
   score?: number;
   intent?: string;
   sentiment?: 'positive' | 'neutral' | 'frustrated' | 'angry';
   summary?: string;
+}
+
+export interface ScheduledMeeting {
+  id: string;
+  name: string;
+  phone: string;
+  email: string;
+  address: string;
+  meetingType: 'phone' | 'in_person' | 'zoom';
+  date: string;
+  time: string;
+  service: string;
+  notes?: string;
+  status: 'confirmed' | 'pending';
 }
 
 export interface TestCase {

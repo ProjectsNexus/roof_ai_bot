@@ -6,8 +6,6 @@ interface TrustBarProps {
 }
 
 export function TrustBar({ config }: TrustBarProps) {
-  const isDemo = !config.webhook || config.webhook.trim() === '';
-
   return (
     <section className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 py-6 sm:py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -25,7 +23,7 @@ export function TrustBar({ config }: TrustBarProps) {
                 {config.rating.toFixed(1)} / 5.0
               </div>
               <div className="text-xs text-slate-500 dark:text-slate-400">
-                {config.reviews}+ Verified Reviews {isDemo && <span className="text-amber-600 dark:text-amber-400 font-medium">(sample)</span>}
+                {config.reviews}+ Verified Reviews
               </div>
             </div>
           </div>
@@ -40,7 +38,7 @@ export function TrustBar({ config }: TrustBarProps) {
                 {config.projects.toLocaleString()}+
               </div>
               <div className="text-xs text-slate-500 dark:text-slate-400">
-                Completed Roofs {isDemo && <span className="text-amber-600 dark:text-amber-400 font-medium">(sample)</span>}
+                Completed Roofs
               </div>
             </div>
           </div>
